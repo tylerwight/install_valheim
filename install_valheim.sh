@@ -1,9 +1,15 @@
 #!/bin/sh
-#Install valehim dedicated server
+#Install Valehim dedicated server
 #Tyler Wight
-cronjob="*/30 * * * * /mnt/valheim/backup.sh"
-sudo adduser valheim
-sudo usermod -aG sudo valheim
+#Change these two variables to install any game. The name will be used for the folder structure and the user that is created.
+#=====================
+gamename=valheim
+gamesteamcode=896660
+#=====================
+
+cronjob="*/30 * * * * /mnt/${gamename}/backup.sh"
+sudo adduser $gamename
+sudo usermod -aG sudo $gamename
 sudo apt-get update -y && sudo apt-get upgrade -y
 
 #adding multiverse required to install cmd on 64 bit machines
@@ -13,13 +19,15 @@ sudo dpkg --add-architecture i386
 sudo apt-get update -y
 sudo apt install lib32gcc1 steamcmd -y
 sudo ln -s /usr/games/steamcmd steamcmd
-sudo mkdir /mnt/valheim
-sudo mkdir /mnt/valheim/bak
-sudo cp ./backup.sh /mnt/valheim/backup.sh
-sudo chown -R valheim:valheim /mnt/valheim
-sudo su -c "steamcmd +login anonymous +force_install_dir /mnt/valheim +app_update 896660 validate +exit" -s /bin/sh valheim
+sudo mkdir /mnt/$gamename
+sudo mkdir /mnt/$gamename/bak
 
-sudo su -c "(crontab -l| grep -v -F '$cronjob'; echo '$cronjob') | crontab -" -s /bin/sh valheim
+sudo cp -n ./backup.sh /mnt/$gamename/backup.sh
+
+sudo chown -R $gamename:$gamename /mnt/$gamename
+sudo su -c "steamcmd +login anonymous +force_install_dir /mnt/${gamename} +app_update ${gamesteamcode} validate +exit" -s /bin/sh $gamename
+
+sudo su -c "(crontab -l| grep -v -F '$cronjob'; echo '$cronjob') | crontab -" -s /bin/sh $gamename
 
 
 #to start go to /mnt/valheim and run the start_server.sh script
