@@ -32,3 +32,9 @@ sudo su -c "(crontab -l| grep -v -F '$cronjob'; echo '$cronjob') | crontab -" -s
 
 #to start go to /mnt/valheim and run the start_server.sh script
 #backups of the world saved to /mnt/valheim/bak every 30 minutes as long as setup worked.
+
+
+echo "The game ${gamename} has been installed or updated  via steamcmd."
+echo "During the insallation we created a user named ${gamename} and installed the game to location /mnt/${gamename}"
+echo "The steam game code used to download from steam CMD was ${gamesteamcode}"
+echo "You can run this script again to update the game."
